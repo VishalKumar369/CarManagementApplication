@@ -4,12 +4,18 @@ const connectDB = require('./config/db')
 
 const cors = require('cors');
 
+const AuthRouters = require("./routes/authRoute");
+const CarRouters = require("./routes/carRoute");
+
 const app = express()
 
-// connectDB();
+connectDB();
 
 app.use(cors())
 app.use(express.json())
+
+app.use('/api/auth',AuthRouters)
+app.use('/api/car',CarRouters)
 
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to the API!' });
