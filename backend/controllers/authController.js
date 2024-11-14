@@ -3,8 +3,6 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken");
 
 exports.registerUser = async(req,res,next) =>{
-    // const {username, email, password}  = req.body;
-
     const  username = req.body.username.trim().toLowerCase()
     const  email = req.body.email.trim().toLowerCase()
     const  password = req.body.password.trim()
@@ -13,7 +11,7 @@ exports.registerUser = async(req,res,next) =>{
         const UserExist = await User.findOne({email});
 
         if(UserExist){
-            return res.status(400).json({message:"user already exists"});
+            return res.status(400).json({success:false,message:"user already exists"});
         }
 
         const hashedPassword = await bcrypt.hash(password,10);
@@ -27,16 +25,18 @@ exports.registerUser = async(req,res,next) =>{
         )
 
         res.status(201).json({
+            success:true,
             message: "User registered successfully",
             user: {
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                token
-        }})
+            },
+            token
+        })
 
     }catch(err){
-       return  res.status(500).json({message:"Error Registering User", error:err.message})
+       return  res.status(500).json({success:false,message:"Error Registering User", error:err.message})
     }
 }
 
@@ -48,13 +48,13 @@ exports.loginUser = async(req,res,next)=>{
         const user = await User.findOne({email});
 
         if(!user) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({ success:false,message: "Invalid credentials" });
         }
 
         const isPasswordMatch = await bcrypt.compare(password,user.password)
 
         if(!isPasswordMatch){
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({ success:false,message: "Invalid credentials" });
         }
 
         const token = jwt.sign(
@@ -64,16 +64,17 @@ exports.loginUser = async(req,res,next)=>{
         )
 
         res.status(200).json({
+            success:true,
             message: "Login successful",
-            body:{
+            user:{
                 id: user._id,
                 email:user.email,
                 username:user.username,
-                token
-            }
+            },
+            token
         })
 
     }catch(err){
-        return res.status(500).json({message:"Error in logging", error:err.message});
+        return res.status(500).json({success:false,message:"Error in logging", error:err.message});
     }
 }
