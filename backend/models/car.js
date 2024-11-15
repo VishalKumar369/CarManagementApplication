@@ -17,13 +17,8 @@ const carSchema = new mongoose.Schema(
       trim: true,
     },
     tags: {
-      type: [
-        {
-          car_type: { type: String },
-          company: { type: String },
-          dealer: { type: String }
-        }
-      ],
+      type: [String],
+      validate: [arrayLimit, "You can only upload up to 10 tag."],
     },
     images: {
       type: [String],

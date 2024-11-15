@@ -10,7 +10,6 @@ import CarDetail from './components/CarDetails';
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   
-  console.log(user)
   if (loading) {
     return <div>Loading...</div>;
   }

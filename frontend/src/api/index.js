@@ -1,12 +1,12 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = "http://localhost:5000/api";
 
 export const api = {
   // Auth endpoints
   signup: async (userData) => {
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
     });
@@ -15,9 +15,9 @@ export const api = {
 
   login: async (credentials) => {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(credentials),
     });
@@ -26,53 +26,58 @@ export const api = {
 
   // Car endpoints
   createCar: async (carData, token) => {
-    const response = await fetch(`${API_BASE_URL}/cars`, {
-      method: 'POST',
+    const response = await fetch(`${API_BASE_URL}/car/create`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(carData),
+      body: carData,
     });
     return response.json();
   },
 
   getCars: async (token) => {
-    const response = await fetch(`${API_BASE_URL}/cars`, {
+    const userId = JSON.parse(localStorage.getItem("user")).id;
+    const response = await fetch(`${API_BASE_URL}/car/view/${userId}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
+        // "Content-Type": "application/json",
       },
     });
-    return response.json();
+
+    
+    const data = await response.json();
+    return data;
   },
 
   getCar: async (id, token) => {
-    const response = await fetch(`${API_BASE_URL}/cars/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/car/getById/${id}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
     return response.json();
   },
 
-  updateCar: async (id, carData, token) => {
-    const response = await fetch(`${API_BASE_URL}/cars/${id}`, {
-      method: 'PUT',
+  updateCar: async (id, carFormData, token) => {
+    const response = await fetch(`${API_BASE_URL}/car/update/${id}`, {
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(carData),
+      body:carFormData,
     });
     return response.json();
   },
 
-  deleteCar: async (id, token) => {
-    const response = await fetch(`${API_BASE_URL}/cars/${id}`, {
-      method: 'DELETE',
+  deleteCar: async (id, token, userId) => {
+    const response = await fetch(`${API_BASE_URL}/car/delete/${id}`, {
+      method: "DELETE",
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(userId),
     });
     return response.json();
   },

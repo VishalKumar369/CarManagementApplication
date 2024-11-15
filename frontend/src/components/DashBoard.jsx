@@ -1,88 +1,9 @@
-// import React, { useState, useEffect } from 'react';
-// import { Link } from 'react-router-dom';
-// import { Search } from 'lucide-react';
-
-// const Dashboard = () => {
-//   const [cars, setCars] = useState([]);
-//   const [searchQuery, setSearchQuery] = useState('');
-  
-//   useEffect(() => {
-//     // Fetch cars data
-//     // setCars(fetchedCars);
-//   }, []);
-
-//   const filteredCars = cars.filter(car =>
-//     car.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//     car.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-//     car.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-//   );
-
-//   return (
-//     <div className="min-h-screen bg-gray-50">
-//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-//         <div className="flex justify-between items-center mb-8">
-//           <h1 className="text-3xl font-bold text-gray-900">My Cars</h1>
-//           <Link
-//             to="/car/new"
-//             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
-//           >
-//             Add New Car
-//           </Link>
-//         </div>
-        
-//         <div className="relative mb-6">
-//           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-//           <input
-//             type="text"
-//             placeholder="Search cars..."
-//             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-//             value={searchQuery}
-//             onChange={(e) => setSearchQuery(e.target.value)}
-//           />
-//         </div>
-
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//           {filteredCars.map(car => (
-//             <Link
-//               key={car.id}
-//               to={`/car/${car.id}`}
-//               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-200"
-//             >
-//               <div className="aspect-w-16 aspect-h-9">
-//                 <img
-//                   src={car.images[0]}
-//                   alt={car.title}
-//                   className="object-cover w-full h-full"
-//                 />
-//               </div>
-//               <div className="p-4">
-//                 <h3 className="text-xl font-semibold text-gray-900 mb-2">{car.title}</h3>
-//                 <p className="text-gray-600 line-clamp-2 mb-2">{car.description}</p>
-//                 <div className="flex flex-wrap gap-2">
-//                   {car.tags.map((tag, index) => (
-//                     <span
-//                       key={index}
-//                       className="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
-//                     >
-//                       {tag}
-//                     </span>
-//                   ))}
-//                 </div>
-//               </div>
-//             </Link>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, UserCircle, LogOut, Plus, ChevronDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../api/index';
+import { toast } from 'react-hot-toast';
 
 const Dashboard = () => {
   const [cars, setCars] = useState([]);
@@ -92,9 +13,22 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch cars data
-    // setCars(fetchedCars);
-  }, []);
+    const fetchCars = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+        const fetchedCars = await api.getCars(token);
+        if(fetchedCars.success){
+          setCars(fetchedCars.cars);
+        }
+      } catch (error) {
+        toast.error('Error fetching cars:', error.message);
+      }
+    };
+  
+    fetchCars();
+  }, [user]);
+  
 
   const handleLogout = () => {
     logout();
@@ -190,8 +124,8 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCars.map(car => (
             <Link
-              key={car.id}
-              to={`/car/${car.id}`}
+              key={car._id}
+              to={`/car/${car._id}`}
               className="group bg-white rounded-xl shadow-sm hover:shadow-xl transition duration-300 overflow-hidden"
             >
               <div className="aspect-w-16 aspect-h-9 bg-gray-200">
