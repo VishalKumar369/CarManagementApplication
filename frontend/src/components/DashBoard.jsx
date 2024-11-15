@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../api/index';
 import { toast } from 'react-hot-toast';
 
-const Dashboard = () => {
+const DashBoard = () => {
   const [cars, setCars] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -172,4 +172,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashBoard;

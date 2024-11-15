@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import AuthForm from './components/AuthForm';
-import Dashboard from './components/Dashboard';
+import DashBoard from './components/DashBoard';
 import CarForm from './components/CarForm';
 import CarDetail from './components/CarDetails';
 
@@ -27,7 +27,7 @@ const App = () => {
             path="/dashboard"
             element={
               <PrivateRoute>
-                <Dashboard />
+                <DashBoard />
               </PrivateRoute>
             }
           />
