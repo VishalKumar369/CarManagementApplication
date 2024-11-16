@@ -111,3 +111,6 @@ For detailed API documentation, visit the [API Docs](https://drive.google.com/fi
 **Email**:- Vishal369mehta@gmail.com
 **Password**:- 123456789
 
+### ⚠️ Note
+- Due to a **cold start**, the application may take some time to load during the first login or API call. Please wait a moment if you experience any delays.
+
