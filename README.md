@@ -102,3 +102,12 @@ npm backend
 
 ```
 ### 4. Access the application: Visit http://localhost:5173 in your browser.
+
+## 📖 API Documentation
+
+For detailed API documentation, visit the [API Docs](https://drive.google.com/file/d/1qs3TidJ6LdMB-Lg3uS70deODKa2_lVJb/view?usp=sharing).
+
+### Initial credentials for better experience
+**Email**:- Vishal369mehta@gmail.com
+**Password**:- 123456789
+
